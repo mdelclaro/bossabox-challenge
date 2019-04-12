@@ -1,0 +1,276 @@
+FORMAT: 1A
+HOST: http://127.0.0.1:3000/v1 
+
+# API VUTTR 
+
+API para a aplicação VUTTR (Very Useful Tools to Remember) 
+
+# Group Sobre 
+# API VUTTR [/] 
+A aplicação é um simples repositório para gerenciar ferramentas com seus respectivos nomes, links, descrições e tags.
+
+# Group Auth
+
+## Autenticação [/auth]
+
+### Login [POST]
+Fazer login do usuário (gerar JWT)
+
++ Attributes (object)
+    + username: `username` (string)
+    + senha: `123456` (string)
+
++ Request (application/json)
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + token: `eyJhbGci` (string)
+        + refreshToken: `dhBur8v` (string)
+        + expiryDate: `Sun Feb 01 1998 00:00:00 GMT+0000 (GMT)` (string)
+
++ Response 401 (application/json)
+    + Attributes (object)
+        + statusCode: 401 (number)
+        + message: `Credenciais inválidas` (string)
+
++ Response 500 (application/json)
+
+## Refresh Token [/auth/refreshToken]
+
+### Refresh Token [POST]
+Atualizar JWT
+
++ Attributes (object)
+    + refreshToken: `fdC4h9` (string)
+
++ Request (application/json)
+
++ Response 200 (application/json)
+    + Attributes (object)
+        + token: `eyJhbGci` (string)
+        + expiryDate: `Sun Feb 01 1998 00:00:00 GMT+0000 (GMT)` (string)
+
++ Response 422 (application/json)
+    + Attributes (Error_422)
+
++ Response 500 (application/json)
+    + Attributes (object)
+        + statusCode: 500 (number)
+        + message: `Token inválido` (string)
+
+# Group Usuário
+
+## Sign Up [/user/signup]
+
+### Sign up [POST]
+Criar conta para o usuário
+
++ Attributes (object)
+    + username: `username` (string)
+    + email: `email@email.com` (string)
+    + senha: `123456` (string)
+
++ Request (application/json)
+
++ Response 201 (application/json)
+    + Attributes (User)
+
++ Response 422 (application/json)
+    + Attributes (Error_422)
+
++ Response 500 (application/json)
+
+# Group Tools
+
+## Tools [/tools]
+
+### Listar ferramentas [GET]
+Listar todas as ferramentas cadastradas 
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer token
+
++ Response 200 (application/json)
+    + Attributes (array[Tool])
+
++ Response 401 (application/json)
+    + Attributes (Error_401)
+
++ Response 404 (application/json)
+    + Attributes (Error_404)
+
++ Response 500 (application/json)
+
+### Criar Ferramenta [POST]
+Cadastrar uma nova ferramenta
+
++ Attributes (object)
+    + title: `Notion` (string, required) 
+    + link: `https://notion.so` (string, required) 
+    + description: `All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.` (string, required)
+    + tags (array, required)
+        - organization
+        - planning
+        - collaboration
+        - writing
+        - calendar
+
++ Request (application/json)
+ 
+    + Headers
+    
+            Authorization: Bearer token
+
++ Response 201 (application/json)
+    + Attributes (Tool)
+
++ Response 401 (application/json)
+    + Attributes (Error_401)
+
++ Response 404 (application/json)
+    + Attributes (Error_404)
+
++ Response 500 (application/json)
+
+## Tool [/tools/{?tag}]
+
++ Parameters
+    + tag: `planning` (string, optional) - Tag
+
+### Filtrar ferramentas [GET]
+Listar ferramentas de acordo com a tag
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer token
+
++ Response 200 (application/json)
+    + Attributes (array[Tool])
+
++ Response 401 (application/json)
+    + Attributes (Error_401)
+
++ Response 404 (application/json)
+    + Attributes (Error_404)
+
++ Response 500 (application/json)
+
+## Tool [/tools/{idFerramenta}]
+
++ Parameters
+    + idFerramenta: `5c9528711` (string, required) - ID da ferramenta
+
+### Lista ferramenta [GET]
+Listar uma ferramenta
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer token
+
++ Response 200 (application/json)
+    + Attributes (Tool)
+
++ Response 401 (application/json)
+    + Attributes (Error_401)
+
++ Response 404 (application/json)
+    + Attributes (Error_404)
+
++ Response 422 (application/json)
+    + Attributes (Error_422)
+
++ Response 500 (application/json)
+
+### Atualizar Ferramenta [PUT]
+Atualizar uma ferramenta
+
++ Attributes (object)
+    + title: `Notion` (string, optional) 
+    + link: `https://notion.so` (string, optional) 
+    + description: `All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.` (string, optional)
+    + tags (array, optional)
+        - organization
+        - planning
+        - collaboration
+        - writing
+        - calendar
+
++ Request (application/json)
+ 
+    + Headers
+    
+            Authorization: Bearer token
+
++ Response 200 (application/json)
+    + Attributes (Tool)
+
++ Response 401 (application/json)
+    + Attributes (Error_401)
+
++ Response 404 (application/json)
+    + Attributes (Error_404)
+
++ Response 422 (application/json)
+    + Attributes (Error_422)
+
++ Response 500 (application/json)
+
+### Remover ferramenta [DELETE]
+Remover uma ferramenta
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer token
+
++ Response 200 (application/json)
+
++ Response 401 (application/json)
+    + Attributes (Error_401)
+
++ Response 404 (application/json)
+    + Attributes (Error_404)
+
++ Response 422 (application/json)
+    + Attributes (Error_422)
+
++ Response 500 (application/json)
+
+# Data Structures
+
+## User (object)
++ _id: `5c7d3f` (string) - ID do usuário
++ username: `username` (string) - nome de usuário
++ email: `email@email.com` (string) - email do usuário
+
+## Tool (object)
++ _id: `5c7d2k` (string) - ID da ferramenta
++ title: `Notion` (string, required) - Título da ferramenta
++ link: `https://notion.so` (string, required) - Link da ferramenta
++ description: `All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.` (string, required)
++ tags (array, required) - Tags
+    - organization
+    - planning
+    - collaboration
+    - writing
+    - calendar
+
+## `Error_401` (object)
++ statusCode: 401 (number) - Status code
++ message: `Not authenticated` (string) - Mensagem do status
+
+## `Error_404` (object)
++ statusCode: 404 (number) - Status code
++ message: `Recurso não encontrado` (string) - Mensagem do status
+
+## `Error_422` (object)
++ statusCode: 422 (number) - Status code
++ message: `Parâmetro inválido ou não informado` (string) - Mensagem do status
