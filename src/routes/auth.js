@@ -9,7 +9,7 @@ const router = express.Router();
 router.post(
   "/",
   [
-    body("username")
+    body("email")
       .not()
       .isEmpty(),
     body("senha")
